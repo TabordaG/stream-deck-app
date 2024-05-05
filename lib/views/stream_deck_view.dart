@@ -34,15 +34,20 @@ class _StreamDeckViewState extends State<StreamDeckView> {
   }
 
   syncWebSocket() async {
-    _channel = await WebSocket.connect('ws://0.tcp.sa.ngrok.io:15608');
-    _channel.pingInterval = const Duration(seconds: 5);
+    try {
+      _channel = await WebSocket.connect(
+          const String.fromEnvironment('WEBSOCKET_URL'));
+      _channel.pingInterval = const Duration(seconds: 5);
 
-    _channel.listen((data) {
-      Logger().i(data);
+      _channel.listen((data) {
+        Logger().i(data);
 
-      String command = data.toString().replaceFirst('echo ', '');
-      streamDeckViewModel.executeCommand(command);
-    });
+        String command = data.toString().replaceFirst('echo ', '');
+        streamDeckViewModel.executeCommand(command);
+      });
+    } catch (e) {
+      Logger().e(e);
+    }
 
     streamDeckViewModel.setIsLoading(false);
   }
