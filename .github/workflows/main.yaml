@@ -48,15 +48,20 @@ jobs:
       - name: Build appBundle
         run: flutter build appbundle --release
 
-        #8 Build IPA (iOS)
+        #8 Build MACOS
+      - name: Build APK
+        run: flutter build macos --release
+
+        #9 Build IPA (iOS)
       - name: Build IPA
         run: flutter build ipa --no-codesign
-      - name: Compress Archives and IPAs
+      - name: Compress Archives and IPAs (IOS and MACOS)
         run: |
           cd build
           tar -czf ios_build.tar.gz ios
+          tar -czf macos_build.tar.gz macos
 
-        #9 Get those build to be available for download
+        #10 Get those build to be available for download
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
@@ -65,11 +70,12 @@ jobs:
             build/app/outputs/flutter-apk/app-release.apk
             build/app/outputs/bundle/release/app-release.aab
             build/ios_build.tar.gz
+            build/macos_build.tar.gz
 
-        #10 Create release with those builds
+        #11 Create release with those builds
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab,build/ios_build.tar.gz"
+          artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab,build/ios_build.tar.gz,build/macos_build.tar.gz"
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
