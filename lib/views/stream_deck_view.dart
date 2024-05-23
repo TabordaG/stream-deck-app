@@ -1,11 +1,10 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_mac_stream_deck/viewmodels/stream_deck_viewmodel.dart';
-import 'package:flutter_mac_stream_deck/views/components/applications/app_section.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter/material.dart';
 
+import 'package:get_it/get_it.dart';
+
+import '../viewmodels/viewmodels.dart';
+import 'components/applications/app_section.dart';
 import 'components/music/control_music.dart';
 import 'components/music/slider.dart';
 import 'components/soundEffect/sound_effect_section.dart';
@@ -18,38 +17,23 @@ class StreamDeckView extends StatefulWidget {
 }
 
 class _StreamDeckViewState extends State<StreamDeckView> {
-  final StreamDeckViewModel streamDeckViewModel = StreamDeckViewModel();
-  late WebSocket _channel;
+  final StreamDeckViewModel streamDeckViewModel =
+      GetIt.I<StreamDeckViewModel>();
+  final ConnectionViewModel connectionViewModel =
+      GetIt.I<ConnectionViewModel>();
 
   @override
   void initState() {
     super.initState();
-    syncWebSocket();
+    connectionViewModel
+        .syncInternetWebSocket()
+        .then((value) => connectionViewModel.syncLocalNetworkConnection());
   }
 
   @override
   void dispose() {
-    _channel.close();
+    connectionViewModel.closeConnection();
     super.dispose();
-  }
-
-  syncWebSocket() async {
-    try {
-      _channel = await WebSocket.connect(
-          const String.fromEnvironment('WEBSOCKET_URL'));
-      _channel.pingInterval = const Duration(seconds: 5);
-
-      _channel.listen((data) {
-        Logger().i(data);
-
-        String command = data.toString().replaceFirst('echo ', '');
-        streamDeckViewModel.executeCommand(command);
-      });
-    } catch (e) {
-      Logger().e(e);
-    }
-
-    streamDeckViewModel.setIsLoading(false);
   }
 
   @override
@@ -79,15 +63,9 @@ class _StreamDeckViewState extends State<StreamDeckView> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  appsSection(
-                    channel: _channel,
-                    streamDeckViewModel: streamDeckViewModel,
-                  ),
+                  appsSection(connectionViewModel: connectionViewModel),
                   const SizedBox(width: 16),
-                  soundEffectsSection(
-                    channel: _channel,
-                    streamDeckViewModel: streamDeckViewModel,
-                  ),
+                  soundEffectsSection(connectionViewModel: connectionViewModel),
                 ],
               ),
               const SizedBox(height: 40),
@@ -100,14 +78,11 @@ class _StreamDeckViewState extends State<StreamDeckView> {
               ),
               const SizedBox(height: 24),
               slider(
-                channel: _channel,
                 streamDeckViewModel: streamDeckViewModel,
+                connectionViewModel: connectionViewModel,
               ),
               const SizedBox(height: 16),
-              controlMusic(
-                channel: _channel,
-                streamDeckViewModel: streamDeckViewModel,
-              ),
+              controlMusic(connectionViewModel: connectionViewModel),
             ],
           ),
         ),

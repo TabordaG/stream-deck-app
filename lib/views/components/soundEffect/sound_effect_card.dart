@@ -1,20 +1,18 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mac_stream_deck/models/sound_effect_model.dart';
-import 'package:flutter_mac_stream_deck/viewmodels/stream_deck_viewmodel.dart';
+
+import '../../../models/models.dart';
+import '../../../viewmodels/viewmodels.dart';
 
 soundEffectCard({
   required SoundEffectModel soundEffect,
-  required WebSocket channel,
-  required StreamDeckViewModel streamDeckViewModel,
+  required ConnectionViewModel connectionViewModel,
 }) {
   return InkWell(
     hoverColor: Colors.transparent,
     splashColor: Colors.transparent,
     highlightColor: Colors.transparent,
     onTap: () {
-      streamDeckViewModel.sendMessage(channel, soundEffect.name);
+      connectionViewModel.sendMessage(soundEffect.name);
     },
     child: Column(
       mainAxisSize: MainAxisSize.min,

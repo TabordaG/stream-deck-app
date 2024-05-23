@@ -1,15 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mac_stream_deck/models/sound_effect_model.dart';
-import 'package:flutter_mac_stream_deck/viewmodels/stream_deck_viewmodel.dart';
+
+import '../../../models/models.dart';
+import '../../../viewmodels/viewmodels.dart';
 
 import 'sound_effect_card.dart';
 
-soundEffectsSection({
-  required WebSocket channel,
-  required StreamDeckViewModel streamDeckViewModel,
-}) {
+soundEffectsSection({required ConnectionViewModel connectionViewModel}) {
   return Expanded(
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -31,9 +27,8 @@ soundEffectsSection({
         Wrap(
           children: List.generate(soundEffectList.length, (index) {
             return soundEffectCard(
-              channel: channel,
               soundEffect: soundEffectList[index],
-              streamDeckViewModel: streamDeckViewModel,
+              connectionViewModel: connectionViewModel,
             );
           }),
         ),

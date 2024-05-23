@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'services/services.dart';
 import 'views/stream_deck_view.dart';
 
-void main() {
+Future<void> main() async {
+  await initInject();
   runApp(const MyApp());
 }
 

@@ -1,20 +1,18 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mac_stream_deck/models/app_model.dart';
-import 'package:flutter_mac_stream_deck/viewmodels/stream_deck_viewmodel.dart';
+
+import '../../../models/models.dart';
+import '../../../viewmodels/viewmodels.dart';
 
 appCard({
   required AppModel appModel,
-  required WebSocket channel,
-  required StreamDeckViewModel streamDeckViewModel,
+  required ConnectionViewModel connectionViewModel,
 }) {
   return InkWell(
     hoverColor: Colors.transparent,
     splashColor: Colors.transparent,
     highlightColor: Colors.transparent,
     onTap: () {
-      streamDeckViewModel.sendMessage(channel, appModel.name);
+      connectionViewModel.sendMessage(appModel.name);
     },
     child: Column(
       mainAxisSize: MainAxisSize.min,

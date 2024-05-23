@@ -1,4 +1,4 @@
-name: flutter_mac_stream_deck
+name: stream_deck
 description: A new Flutter project.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -39,6 +39,7 @@ dependencies:
   mobx: ^2.2.0
   flutter_mobx: ^2.0.6+5
   logger: ^2.0.2
+  get_it: ^7.7.0
 
 dev_dependencies:
   flutter_test:
@@ -52,6 +53,14 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.3.3
   mobx_codegen: ^2.1.1
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon_logo.png"
+  android_background_color: "#575A63"
+  ios_background_color: "#575A63"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

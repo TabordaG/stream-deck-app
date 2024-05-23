@@ -144,17 +144,6 @@ mixin _$StreamDeckViewModel on StreamDeckViewModelBase, Store {
   }
 
   @override
-  dynamic sendMessage(WebSocket channel, String msg) {
-    final _$actionInfo = _$StreamDeckViewModelBaseActionController.startAction(
-        name: 'StreamDeckViewModelBase.sendMessage');
-    try {
-      return super.sendMessage(channel, msg);
-    } finally {
-      _$StreamDeckViewModelBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 isLoading: ${isLoading},

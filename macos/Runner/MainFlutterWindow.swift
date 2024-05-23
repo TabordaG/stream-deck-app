@@ -57,6 +57,11 @@ class MainFlutterWindow: NSWindow, AVAudioPlayerDelegate {
               self.shell(script, false)
               result(100)
 
+            case "startBonjourDiscovery":
+              // Start Bonjour discovery
+              print("Start Bonjour discovery - Not implemented")
+              result(100)
+              
             default:
               result(FlutterMethodNotImplemented)
           }

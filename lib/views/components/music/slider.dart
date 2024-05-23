@@ -1,11 +1,10 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_mac_stream_deck/viewmodels/stream_deck_viewmodel.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter/material.dart';
+
+import '../../../viewmodels/viewmodels.dart';
 
 slider({
-  required WebSocket channel,
+  required ConnectionViewModel connectionViewModel,
   required StreamDeckViewModel streamDeckViewModel,
 }) {
   return Observer(builder: (_) {
@@ -15,7 +14,7 @@ slider({
       max: 7.0,
       divisions: 7,
       onChanged: (newRating) async {
-        streamDeckViewModel.sendMessage(channel, newRating.toString());
+        connectionViewModel.sendMessage(newRating.toString());
       },
       value: streamDeckViewModel.sliderValue,
     );

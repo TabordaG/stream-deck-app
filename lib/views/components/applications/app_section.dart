@@ -1,15 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mac_stream_deck/models/app_model.dart';
-import 'package:flutter_mac_stream_deck/viewmodels/stream_deck_viewmodel.dart';
+
+import '../../../models/models.dart';
+import '../../../viewmodels/viewmodels.dart';
 
 import 'app_card.dart';
 
-appsSection({
-  required WebSocket channel,
-  required StreamDeckViewModel streamDeckViewModel,
-}) {
+appsSection({required ConnectionViewModel connectionViewModel}) {
   return Expanded(
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -31,8 +27,7 @@ appsSection({
           children: List.generate(appList.length, (index) {
             return appCard(
               appModel: appList[index],
-              channel: channel,
-              streamDeckViewModel: streamDeckViewModel,
+              connectionViewModel: connectionViewModel,
             );
           }),
         ),
