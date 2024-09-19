@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:get_it/get_it.dart';
+import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:mobx/mobx.dart';
 
@@ -12,9 +12,11 @@ part 'connection_viewmodel.g.dart';
 class ConnectionViewModel = ConnectionViewModelBase with _$ConnectionViewModel;
 
 // The store-class
-abstract class ConnectionViewModelBase with Store {
-  final StreamDeckViewModel streamDeckViewModel =
-      GetIt.I<StreamDeckViewModel>();
+abstract class ConnectionViewModelBase with Store implements Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut(() => StreamDeckViewModel());
+  }
 
   // -------------------------- Internet Connection --------------------------
   @observable
@@ -36,15 +38,14 @@ abstract class ConnectionViewModelBase with Store {
   /// Finally, it sets the loading state to false, indicating that the WebSocket connection process has completed.
   @action
   syncInternetWebSocket({bool hideLoading = false}) async {
-    if (!hideLoading) streamDeckViewModel.setIsLoading(true);
+    if (!hideLoading) Get.find<StreamDeckViewModel>().setIsLoading(true);
 
     try {
       channelWebSocket = await WebSocket.connect(
           const String.fromEnvironment('WEBSOCKET_URL'));
 
       if (channelWebSocket == null) {
-        Logger().e('Unable to connect to application server');
-        if (!hideLoading) streamDeckViewModel.setIsLoading(false);
+        if (!hideLoading) Get.find<StreamDeckViewModel>().setIsLoading(false);
         return;
       }
 
@@ -54,19 +55,23 @@ abstract class ConnectionViewModelBase with Store {
         Logger().i(data);
 
         String command = data.toString().replaceFirst('echo ', '');
-        streamDeckViewModel.executeCommand(command);
+        Get.find<StreamDeckViewModel>().executeCommand(command);
       });
     } catch (e) {
       Logger().e(e);
     }
 
-    if (!hideLoading) streamDeckViewModel.setIsLoading(false);
+    if (!hideLoading) Get.find<StreamDeckViewModel>().setIsLoading(false);
     return;
   }
 
   @action
   closeConnection() {
+    // Close the WebSocket connection (Internet Connection)
     channelWebSocket?.close();
+
+    // Close the UDP connection (Local Network)
+    UdpCommunication.instance.closeSocket();
   }
 
   /// `sendMessage` is responsible for sending a message over the WebSocket connection.
@@ -104,9 +109,10 @@ abstract class ConnectionViewModelBase with Store {
 
   @action
   listenForLocalNetworkMessages() {
+    if (!UdpCommunication.instance.isSocketInitialized) return;
+
     UdpCommunication.instance.listenForMessages((message) {
-      Logger().i(message.trim());
-      streamDeckViewModel.executeCommand(message.trim());
+      Get.find<StreamDeckViewModel>().executeCommand(message.trim());
     });
   }
 }

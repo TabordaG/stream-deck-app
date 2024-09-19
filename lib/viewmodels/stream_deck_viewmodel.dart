@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:logger/logger.dart';
 import 'package:mobx/mobx.dart';
 
 import '../models/models.dart';
@@ -35,7 +34,7 @@ abstract class StreamDeckViewModelBase with Store {
   setIsLoading(bool value) => isLoading = value;
 
   @action
-  setSliderValue(double value) => sliderValue = value;
+  setSliderValue({required double value}) => sliderValue = value;
 
   /// The `executeCommand` function is responsible for executing a given command.
   ///
@@ -51,7 +50,7 @@ abstract class StreamDeckViewModelBase with Store {
   @action
   executeCommand(String command) {
     if (double.tryParse(command) != null) {
-      setSliderValue(double.parse(command));
+      setSliderValue(value: double.parse(command));
 
       /// If your device is not a Macbook, you can just run the Slider Widget tweak for now
       if (!Platform.isMacOS) return;
@@ -80,7 +79,6 @@ abstract class StreamDeckViewModelBase with Store {
   Future<void> openApp(String name) async {
     final arguments = {'name': name};
     await flutterChannel.invokeMethod('openApp', arguments);
-    Logger().d(flutterChannel.toString());
   }
 
   /// `changeVolume` adjusts the volume of the application's audio output.

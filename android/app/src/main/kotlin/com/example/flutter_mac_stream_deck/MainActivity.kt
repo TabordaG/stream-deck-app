@@ -1,4 +1,4 @@
-package com.example.flutter_mac_stream_deck
+package com.gabrieltaborda.streamdeck
 
 import io.flutter.embedding.android.FlutterActivity
 

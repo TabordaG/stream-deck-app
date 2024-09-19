@@ -1,8 +1,9 @@
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:stream_deck/views/widgets/buttons/button.dart';
 
-import 'package:get_it/get_it.dart';
-
+import '../common/extensions/extensions.dart';
 import '../viewmodels/viewmodels.dart';
 import 'components/applications/app_section.dart';
 import 'components/music/control_music.dart';
@@ -18,13 +19,16 @@ class StreamDeckView extends StatefulWidget {
 
 class _StreamDeckViewState extends State<StreamDeckView> {
   final StreamDeckViewModel streamDeckViewModel =
-      GetIt.I<StreamDeckViewModel>();
+      Get.find<StreamDeckViewModel>();
   final ConnectionViewModel connectionViewModel =
-      GetIt.I<ConnectionViewModel>();
+      Get.find<ConnectionViewModel>();
 
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => Sizes.init(context));
+
     connectionViewModel
         .syncInternetWebSocket()
         .then((value) => connectionViewModel.syncLocalNetworkConnection());
@@ -59,6 +63,10 @@ class _StreamDeckViewState extends State<StreamDeckView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Button.small(
+                icon: Icons.whatshot_sharp,
+                onPressed: () {},
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,

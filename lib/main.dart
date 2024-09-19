@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import 'services/services.dart';
-import 'views/stream_deck_view.dart';
+import 'views/routes/route_pages.dart';
 
 Future<void> main() async {
-  await initInject();
   runApp(const MyApp());
 }
 
@@ -14,7 +13,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Stream Deck Flutter',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -23,7 +22,8 @@ class MyApp extends StatelessWidget {
       ),
       darkTheme: ThemeData.dark(useMaterial3: true),
       themeMode: ThemeMode.dark,
-      home: const StreamDeckView(),
+      initialRoute: '/home',
+      getPages: appRoutes(),
     );
   }
 }

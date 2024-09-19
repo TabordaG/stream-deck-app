@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:stream_deck/views/widgets/buttons/button.dart';
 
 import '../../../models/models.dart';
 import '../../../viewmodels/viewmodels.dart';
-
-import 'app_card.dart';
 
 appsSection({required ConnectionViewModel connectionViewModel}) {
   return Expanded(
@@ -25,9 +24,10 @@ appsSection({required ConnectionViewModel connectionViewModel}) {
         const SizedBox(height: 32),
         Wrap(
           children: List.generate(appList.length, (index) {
-            return appCard(
-              appModel: appList[index],
-              connectionViewModel: connectionViewModel,
+            return Button.small(
+              image: appList[index].asset,
+              onPressed: () =>
+                  connectionViewModel.sendMessage(appList[index].name),
             );
           }),
         ),

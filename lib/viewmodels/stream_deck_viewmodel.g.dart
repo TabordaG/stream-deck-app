@@ -122,11 +122,11 @@ mixin _$StreamDeckViewModel on StreamDeckViewModelBase, Store {
   }
 
   @override
-  dynamic setSliderValue(double value) {
+  dynamic setSliderValue({required double value}) {
     final _$actionInfo = _$StreamDeckViewModelBaseActionController.startAction(
         name: 'StreamDeckViewModelBase.setSliderValue');
     try {
-      return super.setSliderValue(value);
+      return super.setSliderValue(value: value);
     } finally {
       _$StreamDeckViewModelBaseActionController.endAction(_$actionInfo);
     }

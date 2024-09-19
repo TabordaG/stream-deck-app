@@ -10,17 +10,17 @@ class UdpCommunication {
   static final UdpCommunication instance =
       UdpCommunication._privateConstructor();
 
-  Future<void> initializeSocket() async {
+  Future<void> initializeSocket({String? host, int? port}) async {
     try {
       // _udpSocket = await RawDatagramSocket.bind('127.0.0.1', 12345);
-      _udpSocket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 12345,
+      _udpSocket = await RawDatagramSocket.bind(
+          host ?? InternetAddress.anyIPv4, port ?? 12345,
           reuseAddress: true);
       if (_udpSocket == null) {
         Logger().e('Unable to bind to socket');
         return;
       }
 
-      // Inscreva-se no grupo multicast
       _udpSocket?.joinMulticast(InternetAddress(multicastAddress));
       Logger().i(
           'Socket bound to ${_udpSocket?.address.address}:${_udpSocket?.port}');
@@ -34,6 +34,12 @@ class UdpCommunication {
     }
 
     return;
+  }
+
+  bool get isSocketInitialized => _udpSocket != null;
+
+  void closeSocket() {
+    _udpSocket?.close();
   }
 
   void sendMessage(String message, InternetAddress address, int port) {

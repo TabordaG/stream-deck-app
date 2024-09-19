@@ -14,6 +14,7 @@ slider({
       max: 7.0,
       divisions: 7,
       onChanged: (newRating) async {
+        streamDeckViewModel.setSliderValue(value: newRating);
         connectionViewModel.sendMessage(newRating.toString());
       },
       value: streamDeckViewModel.sliderValue,

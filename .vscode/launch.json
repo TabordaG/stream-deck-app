@@ -5,6 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Flutter: Run Unit Tests",
+            "type": "dart",
+            "request": "launch",
+            "program": "./test/",
+            "toolArgs": [
+                "--dart-define-from-file",
+                ".env"
+            ]
+        },
+        {
+            "name": "Flutter: Run E2E Tests",
+            "type": "dart",
+            "request": "launch",
+            "program": "./integration_test/",
+            "toolArgs": [
+                "--dart-define-from-file",
+                ".env"
+            ]
+        },
+        {
             "name": "stream-deck-app",
             "request": "launch",
             "type": "dart",
